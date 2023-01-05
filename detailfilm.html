@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>Detail Film</title>
+</head>
+<style>
+    b {
+      color : rgb(47, 0, 255);
+    }
+    img {
+      border-radius: 8px;
+      width: 25%;
+    }
+    
+    
+</style>
+<body class="bg-gray-600">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 bg-gray-600 mt-6">
+        <div class="mx-auto max-w-3xl">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-black sm:text-4xl mb-6">Detail Film</h2>
+                <img src="" alt="" id="poster_img">
+              </div>
+              
+                <div class="overflow-hidden bg-white shadow sm:rounded-md">
+                  <table class="table mt-4" width="50%">
+                    <tr>
+                      <td><b>Judul Film</b></td>
+                      <td id="title"></td>
+                    </tr>
+                    <tr>
+                      <td><b>Overview</b></td>
+                      <td id="overview"></td>
+                    </tr>
+                    <tr>
+                      <td><b>Genre</b></td>
+                      <td id="genre_list"></td>
+                    </tr>
+                    <tr>
+                      <td><b>Country</b></td>
+                      <td id="production_country"></td>
+                    </tr>
+                    <tr>
+                      <td><b>Release Date</b></td>
+                      <td id="release_date"></td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="text-center my-4">
+                  <a href="index.html">
+                    <button type="button" class="btn btn-primary">Kembali ke Menu Awal</button>
+                  </a>
+                </div>
+            </div>
+          </div>   
+
+      
+      <script>
+        
+        let searchParams = new URLSearchParams(window.location.search);
+        let searchQuery = searchParams.get('id');
+
+        fetch(`https://api.themoviedb.org/3/movie/${searchQuery}?api_key=79a74590457937928e9fe7824aa3fb3d`)
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById("title").innerHTML = data.title;
+            document.getElementById("overview").innerHTML = data.overview;
+            document.getElementById("release_date").innerHTML = data.release_date;
+            document.getElementById("production_country").innerHTML = data.production_countries[0].name;
+            const genreNames = data.genres.map(genre => genre.name);
+            document.getElementById("genre_list").innerHTML = genreNames.join(", ");
+          });
+
+        fetch(`https://api.themoviedb.org/3/movie/${searchQuery}/images?api_key=79a74590457937928e9fe7824aa3fb3d`)
+          .then(response => response.json())
+          .then(data => {
+          document.getElementById("poster_img").src = "https://image.tmdb.org/t/p/w500" + data.posters[0].file_path;
+         });
+      </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>
